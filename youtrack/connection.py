@@ -61,6 +61,7 @@ class Connection(object):
 
         self.url = url
         self.base_url = url + "/api"
+        self.token = api_key
         if api_key is None:
             self._credentials = (login, password)
             self._login(*self._credentials)
@@ -75,8 +76,10 @@ class Connection(object):
         if response.status != 200:
             raise youtrack.YouTrackException('/user/login', response, content)
         self.headers = {'Cookie': response['set-cookie'],
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
                         'Cache-Control': 'no-cache',
-                        'Authorization': 'Basic ' + base64.b64encode(bytes(login + ':' + password, 'utf-8')).decode()}
+                        'Authorization': 'Bearer ' + self.token}
 
     @relogin_on_401
     def _req(self, method, url, body=None, ignore_status=None, content_type=None, accept_header=None):

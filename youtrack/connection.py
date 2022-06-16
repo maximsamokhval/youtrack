@@ -60,7 +60,7 @@ class Connection(object):
             url = url.rstrip('/')
 
         self.url = url
-        self.base_url = url + "/rest"
+        self.base_url = url + "/api"
         if api_key is None:
             self._credentials = (login, password)
             self._login(*self._credentials)
